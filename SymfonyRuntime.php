@@ -15,6 +15,7 @@ use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\RawInputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Dotenv\Dotenv;
@@ -229,6 +230,7 @@ class SymfonyRuntime extends GenericRuntime
         return match ($type) {
             Request::class => $this->request ??= Request::createFromGlobals(),
             InputInterface::class => $this->getInput(),
+            RawInputInterface::class => $this->getInput(),
             OutputInterface::class => $this->output ??= new ConsoleOutput(),
             Application::class => $this->console ??= new Application(),
             Command::class => $this->command ??= new Command(),
@@ -246,6 +248,7 @@ class SymfonyRuntime extends GenericRuntime
             Application::class => $self,
             Command::class => $self,
             InputInterface::class => $self,
+            RawInputInterface::class => $self,
             OutputInterface::class => $self,
         ];
         $runtime->options = $self->options;
