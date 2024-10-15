@@ -17,19 +17,21 @@ require __DIR__.'/autoload.php';
 
 class TestKernel implements HttpKernelInterface
 {
+    private $env;
     private $var;
 
-    public function __construct(string $var)
+    public function __construct(string $env, string $var)
     {
+        $this->env = $env;
         $this->var = $var;
     }
 
     public function handle(Request $request, $type = self::MASTER_REQUEST, $catch = true): Response
     {
-        return new Response('OK Kernel '.$this->var);
+        return new Response('OK Kernel (env='.$this->env.') '.$this->var);
     }
 }
 
 return function (array $context) {
-    return new TestKernel($context['SOME_VAR']);
+    return new TestKernel($context['APP_ENV'], $context['SOME_VAR']);
 };
