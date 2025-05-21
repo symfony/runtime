@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+7.4
+---
+
+ * Add `FrankenPhpWorkerRunner`
+ * Add automatic detection of FrankenPHP worker mode in `SymfonyRuntime`
+
 6.4
 ---
 
