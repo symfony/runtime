@@ -162,11 +162,7 @@ class SymfonyRuntime extends GenericRuntime
 
             if (!$application->getName() || !$console->has($application->getName())) {
                 $application->setName($_SERVER['argv'][0]);
-                if (method_exists($console, 'addCommand')) {
-                    $console->addCommand($application);
-                } else {
-                    $console->add($application);
-                }
+                $console->addCommand($application);
             }
 
             $console->setDefaultCommand($application->getName(), true);

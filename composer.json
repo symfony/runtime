@@ -27,6 +27,7 @@
         "symfony/http-kernel": "^7.4|^8.0"
     },
     "conflict": {
+        "symfony/console": "<7.4",
         "symfony/error-handler": "<7.4"
     },
     "autoload": {
