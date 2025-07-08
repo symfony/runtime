@@ -34,7 +34,7 @@ class FrankenPhpWorkerRunner implements RunnerInterface
         // Prevent worker script termination when a client connection is interrupted
         ignore_user_abort(true);
 
-        $server = array_filter($_SERVER, static fn (string $key) => !str_starts_with($key, 'HTTP_'), ARRAY_FILTER_USE_KEY);
+        $server = array_filter($_SERVER, static fn (string $key) => !str_starts_with($key, 'HTTP_'), \ARRAY_FILTER_USE_KEY);
         $server['APP_RUNTIME_MODE'] = 'web=1&worker=1';
 
         $handler = function () use ($server, &$sfRequest, &$sfResponse): void {
@@ -54,7 +54,7 @@ class FrankenPhpWorkerRunner implements RunnerInterface
 
         $loops = 0;
         do {
-            $ret = \frankenphp_handle_request($handler);
+            $ret = frankenphp_handle_request($handler);
 
             if ($this->kernel instanceof TerminableInterface && $sfRequest && $sfResponse) {
                 $this->kernel->terminate($sfRequest, $sfResponse);
