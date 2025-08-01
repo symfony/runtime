@@ -23,11 +23,16 @@ class SymfonyRuntimeTest extends TestCase
         $application = $this->createStub(HttpKernelInterface::class);
 
         $runtime = new SymfonyRuntime();
-        $this->assertNotInstanceOf(FrankenPhpWorkerRunner::class, $runtime->getRunner(null));
-        $this->assertNotInstanceOf(FrankenPhpWorkerRunner::class, $runtime->getRunner($application));
 
-        $_SERVER['FRANKENPHP_WORKER'] = 1;
-        $this->assertInstanceOf(FrankenPhpWorkerRunner::class, $runtime->getRunner($application));
+        try {
+            $this->assertNotInstanceOf(FrankenPhpWorkerRunner::class, $runtime->getRunner(null));
+            $this->assertNotInstanceOf(FrankenPhpWorkerRunner::class, $runtime->getRunner($application));
+            $_SERVER['FRANKENPHP_WORKER'] = 1;
+            $this->assertInstanceOf(FrankenPhpWorkerRunner::class, $runtime->getRunner($application));
+        } finally {
+            restore_error_handler();
+            restore_exception_handler();
+        }
     }
 
     public function testStringWorkerMaxLoopThrows()
