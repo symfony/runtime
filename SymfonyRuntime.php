@@ -187,7 +187,7 @@ class SymfonyRuntime extends GenericRuntime
             if (!$application->getName() || !$console->has($application->getName())) {
                 $application->setName($_SERVER['argv'][0]);
 
-                if (!method_exists($console, 'addCommand') || method_exists($console, 'add') && (new \ReflectionMethod($console, 'add'))->getDeclaringClass()->getName() !== (new \ReflectionMethod($console, 'addCommand'))->getDeclaringClass()->getName()) {
+                if (!method_exists($console, 'addCommand') || method_exists($console, 'add') && (new \ReflectionMethod($console, 'add'))->class !== (new \ReflectionMethod($console, 'addCommand'))->class) {
                     $console->add($application);
                 } else {
                     $console->addCommand($application);
