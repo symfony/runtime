@@ -130,7 +130,7 @@ class SymfonyRuntime extends GenericRuntime
             $dotenv->bootEnv($options['project_dir'].'/'.($options['dotenv_path'] ?? '.env'), 'dev', (array) ($options['test_envs'] ?? ['test']), $overrideExistingVars);
 
             if (\is_array($options['dotenv_extra_paths'] ?? null) && $options['dotenv_extra_paths']) {
-                $options['dotenv_extra_paths'] = array_map(fn (string $path) => $options['project_dir'].'/'.$path, $options['dotenv_extra_paths']);
+                $options['dotenv_extra_paths'] = array_map(static fn (string $path) => $options['project_dir'].'/'.$path, $options['dotenv_extra_paths']);
 
                 $overrideExistingVars
                     ? $dotenv->overload(...$options['dotenv_extra_paths'])
