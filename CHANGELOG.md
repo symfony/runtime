@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+8.1
+---
+
+ * Add `resolveType()` for customizing how types are resolved in runtimes extending `SymfonyRuntime`
+
 7.4
 ---
 
