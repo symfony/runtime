@@ -177,6 +177,10 @@ class SymfonyRuntime extends GenericRuntime
         }
 
         if ($application instanceof Response) {
+            if ($_SERVER['FRANKENPHP_WORKER'] ?? false) {
+                return new FrankenPhpWorkerRunner($application, $this->options['worker_loop_max']);
+            }
+
             return new ResponseRunner($application);
         }
 

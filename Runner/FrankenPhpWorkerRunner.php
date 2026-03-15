@@ -12,6 +12,7 @@
 namespace Symfony\Component\Runtime\Runner;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\TerminableInterface;
 use Symfony\Component\Runtime\RunnerInterface;
@@ -24,7 +25,7 @@ use Symfony\Component\Runtime\RunnerInterface;
 class FrankenPhpWorkerRunner implements RunnerInterface
 {
     public function __construct(
-        private HttpKernelInterface $kernel,
+        private HttpKernelInterface|Response $application,
         private int $loopMax,
     ) {
     }
@@ -46,8 +47,12 @@ class FrankenPhpWorkerRunner implements RunnerInterface
             // Merge the environment variables coming from DotEnv with the ones tied to the current request
             $_SERVER += $server;
 
-            $sfRequest = Request::createFromGlobals();
-            $sfResponse = $this->kernel->handle($sfRequest);
+            if ($this->application instanceof HttpKernelInterface) {
+                $sfRequest = Request::createFromGlobals();
+                $sfResponse = $this->application->handle($sfRequest);
+            } else {
+                $sfResponse = $this->application;
+            }
 
             $sfResponse->send();
         };
@@ -56,8 +61,8 @@ class FrankenPhpWorkerRunner implements RunnerInterface
         do {
             $ret = frankenphp_handle_request($handler);
 
-            if ($this->kernel instanceof TerminableInterface && $sfRequest && $sfResponse) {
-                $this->kernel->terminate($sfRequest, $sfResponse);
+            if ($this->application instanceof TerminableInterface && $sfRequest && $sfResponse) {
+                $this->application->terminate($sfRequest, $sfResponse);
             }
 
             gc_collect_cycles();
