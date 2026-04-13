@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-if (!\function_exists('frankenphp_handle_request')) {
+if (!function_exists('frankenphp_handle_request')) {
     function frankenphp_handle_request(callable $callable): bool
     {
         $callable();
