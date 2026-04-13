@@ -33,3 +33,5 @@ class TestKernel implements HttpKernelInterface
 }
 
 return static fn (array $context) => new TestKernel($context['APP_ENV'], $context['SOME_VAR']);
+
+// @php-cs-fixer-ignore psr_autoloading

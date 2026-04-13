@@ -117,3 +117,5 @@ class ComposerPlugin implements PluginInterface, EventSubscriberInterface
         ];
     }
 }
+
+// @php-cs-fixer-ignore no_useless_concat_operator Disable to not override hack about __DIR__ and Composer pre-processes plugins
