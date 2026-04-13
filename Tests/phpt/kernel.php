@@ -32,4 +32,4 @@ class TestKernel implements HttpKernelInterface
     }
 }
 
-return fn (array $context) => new TestKernel($context['APP_ENV'], $context['SOME_VAR']);
+return static fn (array $context) => new TestKernel($context['APP_ENV'], $context['SOME_VAR']);
