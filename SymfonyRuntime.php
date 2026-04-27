@@ -170,7 +170,7 @@ class SymfonyRuntime extends GenericRuntime
     public function getRunner(?object $application): RunnerInterface
     {
         if ($application instanceof HttpKernelInterface) {
-            if ($_SERVER['FRANKENPHP_WORKER'] ?? false) {
+            if (filter_var($_SERVER['FRANKENPHP_WORKER'] ?? false, \FILTER_VALIDATE_BOOL)) {
                 return new FrankenPhpWorkerRunner($application, $this->options['worker_loop_max']);
             }
 
@@ -178,7 +178,7 @@ class SymfonyRuntime extends GenericRuntime
         }
 
         if ($application instanceof Response) {
-            if ($_SERVER['FRANKENPHP_WORKER'] ?? false) {
+            if (filter_var($_SERVER['FRANKENPHP_WORKER'] ?? false, \FILTER_VALIDATE_BOOL)) {
                 return new FrankenPhpWorkerRunner($application, $this->options['worker_loop_max']);
             }
 

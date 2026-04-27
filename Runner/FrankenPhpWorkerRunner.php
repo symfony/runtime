@@ -36,7 +36,8 @@ class FrankenPhpWorkerRunner implements RunnerInterface
         ignore_user_abort(true);
 
         $server = array_filter($_SERVER, static fn (string $key) => !str_starts_with($key, 'HTTP_'), \ARRAY_FILTER_USE_KEY);
-        $server['APP_RUNTIME_MODE'] = 'web=1&worker=1';
+        $resetKernel = $this->application instanceof HttpKernelInterface && filter_var($server['FRANKENPHP_RESET_KERNEL'] ?? false, \FILTER_VALIDATE_BOOL);
+        $server['APP_RUNTIME_MODE'] = $resetKernel ? 'web=1&worker=2' : 'web=1&worker=1';
 
         $handler = function () use ($server, &$sfRequest, &$sfResponse): void {
             // Connect to the Xdebug client if it's available
@@ -63,6 +64,9 @@ class FrankenPhpWorkerRunner implements RunnerInterface
 
             if ($this->application instanceof TerminableInterface && $sfRequest && $sfResponse) {
                 $this->application->terminate($sfRequest, $sfResponse);
+            }
+            if ($resetKernel) {
+                $this->application = clone $this->application;
             }
 
             gc_collect_cycles();

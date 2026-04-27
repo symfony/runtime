@@ -6,6 +6,7 @@ CHANGELOG
 
  * Add `resolveType()` for customizing how types are resolved in runtimes extending `SymfonyRuntime`
  * Add support for apps returning a `Response` object in `FrankenPhpWorkerRunner`
+ * Add `FRANKENPHP_RESET_KERNEL` to reset the kernel between requests
 
 7.4
 ---
