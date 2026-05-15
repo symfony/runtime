@@ -222,7 +222,7 @@ class SymfonyRuntime extends GenericRuntime
 
     protected function getArgument(\ReflectionParameter $parameter, ?string $type): mixed
     {
-        return $this->resolveType($type) ?? parent::getArgument($parameter, $type);
+        return (null !== $type ? $this->resolveType($type) : null) ?? parent::getArgument($parameter, $type);
     }
 
     protected function resolveType(string $type): mixed

@@ -168,10 +168,10 @@ class GenericRuntime implements RuntimeInterface
             return $this;
         }
 
-        if (!$runtime = $this->getRuntime($type)) {
+        if (!$runtime = $this->getRuntime($type ?? 'mixed')) {
             $r = $parameter->getDeclaringFunction();
 
-            throw new \InvalidArgumentException(\sprintf('Cannot resolve argument "%s $%s" in "%s" on line "%d": "%s" supports only arguments "array $context", "array $argv" and "array $request", or a runtime named "Symfony\Runtime\%1$sRuntime".', $type, $parameter->name, $r->getFileName(), $r->getStartLine(), get_debug_type($this)));
+            throw new \InvalidArgumentException(\sprintf('Cannot resolve argument "%s $%s" in "%s" on line "%d": "%s" supports only arguments "array $context", "array $argv" and "array $request", or a runtime named "Symfony\Runtime\%1$sRuntime".', $type ?? 'mixed', $parameter->name, $r->getFileName(), $r->getStartLine(), get_debug_type($this)));
         }
 
         return $runtime->getArgument($parameter, $type);

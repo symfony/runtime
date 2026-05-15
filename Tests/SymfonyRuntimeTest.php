@@ -50,4 +50,38 @@ class SymfonyRuntimeTest extends TestCase
 
         new SymfonyRuntime(['worker_loop_max' => false]);
     }
+
+    public function testUntypedOptionalArgumentDoesNotCrash()
+    {
+        $runtime = new SymfonyRuntime();
+        $captured = null;
+
+        try {
+            $resolver = $runtime->getResolver(static function ($untyped = 'default') use (&$captured) {
+                $captured = $untyped;
+            });
+            [$callable, $args] = $resolver->resolve();
+            $callable(...$args);
+        } finally {
+            restore_error_handler();
+            restore_exception_handler();
+        }
+
+        $this->assertSame([], $args);
+        $this->assertSame('default', $captured);
+    }
+
+    public function testUntypedRequiredArgumentThrowsInvalidArgument()
+    {
+        $runtime = new SymfonyRuntime();
+
+        try {
+            $resolver = $runtime->getResolver(static fn ($untyped) => $untyped);
+            $this->expectException(\InvalidArgumentException::class);
+            $resolver->resolve();
+        } finally {
+            restore_error_handler();
+            restore_exception_handler();
+        }
+    }
 }
