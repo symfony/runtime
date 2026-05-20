@@ -96,7 +96,7 @@ class SymfonyRuntime extends GenericRuntime
 
         if (isset($options['env'])) {
             $_SERVER[$envKey] = $options['env'];
-        } elseif (empty($_GET) && isset($_SERVER['argv']) && class_exists(ArgvInput::class)) {
+        } elseif (!isset($_SERVER['QUERY_STRING']) && isset($_SERVER['argv']) && class_exists(ArgvInput::class)) {
             $this->options = $options;
             $this->getInput();
         }
@@ -208,7 +208,7 @@ class SymfonyRuntime extends GenericRuntime
 
     private function getInput(): ArgvInput
     {
-        if (!empty($_GET) && filter_var(\ini_get('register_argc_argv'), \FILTER_VALIDATE_BOOL)) {
+        if (isset($_SERVER['QUERY_STRING']) && filter_var(\ini_get('register_argc_argv'), \FILTER_VALIDATE_BOOL)) {
             throw new \Exception('CLI applications cannot be run safely on non-CLI SAPIs with register_argc_argv=On.');
         }
 
