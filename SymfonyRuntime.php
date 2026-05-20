@@ -106,7 +106,7 @@ class SymfonyRuntime extends GenericRuntime
         $envKey = $options['env_var_name'] ??= 'APP_ENV';
         $debugKey = $options['debug_var_name'] ??= 'APP_DEBUG';
 
-        if (isset($_SERVER['argv']) && !empty($_GET)) {
+        if (isset($_SERVER['argv']) && isset($_SERVER['QUERY_STRING'])) {
             // register_argc_argv=On is too risky in web servers
             $_SERVER['argv'] = [];
             $_SERVER['argc'] = 0;
@@ -114,7 +114,7 @@ class SymfonyRuntime extends GenericRuntime
 
         if (isset($options['env'])) {
             $_SERVER[$envKey] = $options['env'];
-        } elseif (empty($_GET) && isset($_SERVER['argv']) && class_exists(ArgvInput::class)) {
+        } elseif (!isset($_SERVER['QUERY_STRING']) && isset($_SERVER['argv']) && class_exists(ArgvInput::class)) {
             $this->options = $options;
             $this->getInput();
         }
