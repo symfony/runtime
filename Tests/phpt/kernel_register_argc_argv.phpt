@@ -8,6 +8,7 @@ register_argc_argv=1
 
 // emulating PHP behavior with register_argc_argv=1
 $_GET['-e_test'] = '';
+$_SERVER['QUERY_STRING'] = '-e_test=';
 $_SERVER['argc'] = 1;
 $_SERVER['argv'] = [' ', '-e', 'test'];
 
