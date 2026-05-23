@@ -100,7 +100,9 @@ class SymfonyRuntime extends GenericRuntime
         $envKey = $options['env_var_name'] ??= 'APP_ENV';
         $debugKey = $options['debug_var_name'] ??= 'APP_DEBUG';
 
-        if (isset($_SERVER['argv']) && isset($_SERVER['QUERY_STRING'])) {
+        if (isset($_SERVER['argv']) && isset($_SERVER['QUERY_STRING'])
+            && !\in_array(\PHP_SAPI, ['cli', 'phpdbg', 'embed'], true)
+        ) {
             // register_argc_argv=On is too risky in web servers
             $_SERVER['argv'] = [];
             $_SERVER['argc'] = 0;
